@@ -550,18 +550,25 @@ plotenvsya <- ggarrange(rapgenv,rrapgenv,ncol = 2, nrow = 1)
 plotenvsya
 ################
 
-rownames(Datos_goudotiana)<- Datos_goudotiana$Ind
-Datos_goudotiana$Fuego <- NULL
+rownames(Ind_data_goudotiana)<- Ind_data_goudotiana$Ind
+Fuegos <- Ind_data_goudotiana$Fuegos
+Ind_data_goudotiana$Ind <- NULL
 row.names(Datos_goudotiana) <- Datos_goudotiana$Ind
+
+
 nmlt <- melt(Datos_por_individuo_nitida)
 nmlt[nmlt =="Sin"] <- "No Fire"
+
 ggplot(nmlt, aes(x = Fuegos, y = value), size = value) + geom_boxplot() + 
   facet_wrap(~ variable, scales = "free_y" ) + labs(x = "Fire" , y = "Value") 
-colnames(Datos_goudotiana)[8] <- "Average Diameter" 
+
+colnames(Ind_data_goudotiana)[8] <- "Average Diameter" 
 dglt <- melt(Datos_goudotiana)
-dgsss <- subset(Datos_goudotiana, select = c("Hmax", "LA","LDMC","Lt","RD","SLA","Fuegos"))
-dgrrr <- subset(Datos_goudotiana, select = c("Average Diameter", "Bi", "SRA", "Branching frequency", "Surface Area","RTD","SRL","Fuegos"))
-colnames(dgrrr)[5] <- "Surfacearea" 
+dgsss <- subset(Ind_data_goudotiana, select = c("Hmax", "LA","LDMC","Lt","RD","SLA","Fuegos"))
+dgrrr <- subset(Ind_data_goudotiana, select = c("Average Diameter", "Bi", "SRA", "Branching frequency", "Surface Area","RTD","SRL","Fuegos"))
+
+colnames(dgrrr)[1] <- "Averagediameter" 
+
 dgltss <- melt(dgsss)
 dgltrr <- melt(dgrrr)
 
@@ -576,7 +583,7 @@ dgltss$Fuegos <- factor(dgltss$Fuegos,
 gsb<-ggplot(dgltss, aes(x = Fuegos, y = value), size = value) + geom_boxplot(aes(color=Fuegos )) + theme_bw() +
   facet_wrap(~ variable, scales = "free_y",
              strip.position = "left",
-             labeller = as_labeller(c(Hmax="Hmax(cm)",LA="LA(cm2)",LDMC="LDMC(g)",Lt="Lt(cm)",RD="RD(cm)",SLA="SLA(cm2/g)"))) +
+             labeller = as_labeller(c(Hmax="H(cm)",LA="LA(cm2)",LDMC="LDMC(g)",Lt="Lt(cm)",RD="RD(cm)",SLA="SLA(cm2/g)"))) +
   labs(x = "Fire" , y = "Value") + ylab(NULL) +
   theme(text = element_text(size=29),
         legend.position = "none",
@@ -598,19 +605,23 @@ grb
 
 ##########
 
-rownames(Datos_por_individuo_nitida) <- Datos_por_individuo_nitida$Ind
-Datos_por_individuo_nitida$Ind <- NULL
-Datos_por_individuo_nitida$Fuegos <- NULL
-Datos_por_individuo_nitida$Fuego <- NULL
-Datos_por_individuo_nitida$Puya <-NULL
+rownames(Ind_data_nitida) <- Ind_data_nitida$Ind
+Ind_data_nitida$Ind <- NULL
+Fnitida <- Ind_data_nitida$Fuegos
+Ind_data_nitida$Fuegos <- NULL
+Ind_data_nitida$Fuego <- NULL
+Ind_data_nitida$Puya <-NULL
 
-Fnitida <- Datos_por_individuo_nitida$Fuegos
+
 Fnitida[Fnitida=="Sin"] <- "No fire"
-Datos_por_individuo_nitida['Fuegos'] <- c(Fnitida)
-colnames(Datos_por_individuo_nitida)[7] <- 'branchingfrequency'
-nsn <- Datos_por_individuo_nitida[,c("Lt", "Hmax", "RD","LA","LDMC","SLA","Surfacearea","SRL","SRA","RTD","Bi","Fuegos")]
+Ind_data_nitida['Fuegos'] <- c(Fnitida)
+colnames(Ind_data_nitida)[9] <- 'Surfacearea'
+
+nsn <- Ind_data_nitida[,c("Lt", "Hmax", "RD","LA","LDMC","SLA","Surfacearea","SRL","SRA","RTD","Bi","Fuegos")]
 sn <- Datos_por_individuo_nitida[,c("Average diameter", "Branching frequency", "Fuegos")]
+
 colnames(sn)[2] <- "Branchingfrequency"
+
 snm <- melt(sn)
 
 snm$Fuegos <- factor(snm$Fuegos,
@@ -627,11 +638,12 @@ ggplot(snm, aes(x = Fuegos, y = value), size = value) + geom_boxplot(aes(color=F
 
 
 nsnm<-melt(nsn)
-
+nsnm$Fuegos <- factor(nsnm$Fuegos,
+                        c("No fire","1988"))
 ggplot(nsnm, aes(x = Fuegos, y = value), size = value) + geom_boxplot(aes(color=Fuegos )) + theme_bw() +
   facet_wrap(~ variable, scales = "free_y",
              strip.position = "left",
-             labeller = as_labeller(c(Lt="Lt(cm)",Hmax="Hmax(cm)",RD="RD(cm)",LA="LA(cm)",LDMC="LDMC(g)",
+             labeller = as_labeller(c(Lt="Lt(cm)",Hmax="H(cm)",RD="RD(cm)",LA="LA(cm)",LDMC="LDMC(g)",
                                       SLA="SLA(cm2/g)",Surfacearea="Surface area (cm2)", SRL = "SRL (mm/g)",
                                       SRA= "SRA(mm2/g)", RTD= "RTD (g/mm3)", Bi = "Bi (root tips/mm)"))) +
   labs(x = "Fire" , y = "Value") + ylab(NULL) +
