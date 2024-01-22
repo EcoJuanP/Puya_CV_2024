@@ -549,8 +549,6 @@ rrpgenv
 plotenvsya <- ggarrange(rapgenv,rrapgenv,ncol = 2, nrow = 1)
 plotenvsya
 ################
-library(egg)
-devtools::install_github("eliocamp/tagger")
 
 rownames(Datos_goudotiana)<- Datos_goudotiana$Ind
 Datos_goudotiana$Fuego <- NULL
@@ -597,8 +595,7 @@ grb<-ggplot(dgltrr, aes(x = Fuegos, y = value), size = value) + geom_boxplot(aes
         strip.background = element_blank(),
         strip.placement = "outside")
 grb
-tag_facet(grb,size = 10,open = "",close=")",
-          tag_pool = LETTERS, fontface = 1)
+
 ##########
 
 rownames(Datos_por_individuo_nitida) <- Datos_por_individuo_nitida$Ind
